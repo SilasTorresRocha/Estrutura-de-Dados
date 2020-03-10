@@ -57,7 +57,7 @@ void imprimePilha(pilhaEstatica *pilha){
         printf("%i ",pilha->array[i].chave);
     }
     printf("}\n");
-    printf("O tamanho da pilha e de %i\nUso:%.1f%%\n",tamanhoPilha(pilha), ((float)pilha->topo/100.0)*100);
+    printf("O tamanho da pilha: %i\nUso:%.1f%%\n",tamanhoPilha(pilha), ((float)pilha->topo/(float)MAXTAM)*100);
     return;
 }
 
