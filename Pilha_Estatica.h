@@ -41,6 +41,10 @@ void empilha(Objeto item, pilhaEstatica *pilha){
     }
 }
 void desempilha(pilhaEstatica *pilha){
+    if(pilha->topo==0){
+        printf("Nao pode\n");
+        return;
+    }
     pilha->topo--;
     printf("Removido: %i\n",pilha->array[pilha->topo].chave);
     return;
