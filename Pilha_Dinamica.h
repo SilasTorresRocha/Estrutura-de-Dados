@@ -46,13 +46,26 @@ void empilha(Objeto obj, PilhaDinamica *p){
         p->tamanho++;
     } else{
         aux->obj.chave=obj.chave;
-        aux->proximo=NULL;
-        p->topo->proximo=aux;
+        aux->proximo=p->topo;
+        p->topo=aux;
         p->tamanho++;
     }
     return;
 }
 void desempilha(PilhaDinamica *p, Objeto *obj){
+    PtrNoPilha aux=(PtrNoPilha)malloc(sizeof(PtrNoPilha));
+    if(!aux){
+        printf("Erro: Nao foi possivel alocar menoria\n");
+        return;
+    }if(estaVazia(p)){
+        printf("A pilha estar vazia\n");
+    } else{
+        aux=p->topo;
+        p->topo=p->topo->proximo;
+        obj->chave=aux->obj.chave;
+        free(aux);
+        p->tamanho--;
+    }
 
 }
 int tamanhoPilha(PilhaDinamica *p){
@@ -62,11 +75,14 @@ void topo(PilhaDinamica *p, Objeto *obj){
     obj->chave=p->topo->obj.chave;
 }
 void imprimePilha(PilhaDinamica *p){
-    printf("{");
-    for (int i = 0; i < tamanhoPilha(p) ; ++i) {
-        printf("")
+    printf("{ ");
+    for (PtrNoPilha aux=p->topo ; aux!=NULL ; aux =aux->proximo) {
+        printf("%i, ",aux->obj.chave);
     }
+
+    printf("}");
 }
+
 
 
 #endif //UNTITLED_PILHA_DINAMICA_H
