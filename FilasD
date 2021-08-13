@@ -1,0 +1,117 @@
+//
+// Created by Silas on 12/08/2021.
+//
+
+#ifndef NOVA_FILA_DINAMICA_FILA_H
+#define NOVA_FILA_DINAMICA_FILA_H
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+typedef struct {
+    int id;
+    int ciclo_combustivel;
+} Objeto;
+
+typedef struct NoFila *PtrNoFila;
+
+typedef struct NoFila{
+    Objeto aviao;
+    PtrNoFila proximo;
+} NoFila;
+
+typedef struct {
+    PtrNoFila inicio;
+    PtrNoFila fim;
+    int tamanho;
+} FilaDinamica;
+
+void iniciaFila(FilaDinamica *fila){
+    fila->tamanho=0;
+    fila->fim=NULL;
+    fila->inicio=NULL;
+}
+void imprimeFila(FilaDinamica *fila){
+    PtrNoFila aux;
+    aux=fila->inicio;
+    for (int i = 0; i < fila->tamanho ; ++i) {
+        printf("Id:%i,Ciclo De Combustivel:%i\n",aux->aviao.id,aux->aviao.ciclo_combustivel);
+        aux=aux->proximo;
+    }
+}
+void enfileira(Objeto x, FilaDinamica *fila){
+   PtrNoFila aux;
+   aux = (PtrNoFila) malloc(sizeof(NoFila));
+    if(!aux){
+        printf("[ E ]: Erro ao alocar\n");
+    }
+    aux->aviao.id=x.id;
+    aux->aviao.ciclo_combustivel=x.ciclo_combustivel;
+    if(fila->tamanho==0){ // em caso de 1ª inserção
+        fila->inicio=fila->fim=aux;
+        aux->proximo=NULL;
+    } else{  // caso não seja a 1ª inserção
+        aux->proximo=fila->fim->proximo;
+        fila->fim->proximo=aux;
+        fila->fim=fila->fim->proximo;
+    }
+    fila->tamanho++;
+}
+void desenfileira(FilaDinamica *fila, Objeto *x){
+    if(fila->tamanho!=0){
+        PtrNoFila aux;
+        aux=fila->inicio;
+        x->ciclo_combustivel=aux->aviao.ciclo_combustivel;
+        x->id=aux->aviao.id;
+        fila->inicio=fila->inicio->proximo;
+        free(aux);
+        fila->tamanho--;
+    } else{
+        printf("A fila ja estar vazia!\n");
+    }
+
+}
+
+bool estaVazia(FilaDinamica *fila){
+    return (fila->tamanho==0);
+}
+int tamanhoFila(FilaDinamica *fila){
+    return (fila->tamanho);
+}
+Objeto inicioFila(FilaDinamica *fila){
+    return (fila->inicio->aviao);
+}
+Objeto fimFila(FilaDinamica *fila){
+    return (fila->fim->aviao);
+}
+
+
+
+
+
+void testefila(){
+    FilaDinamica f;
+    iniciaFila(&f);
+    printf("1-sem uso\n0-Em uso\nUso:%i\n",estaVazia(&f));
+    Objeto a;
+    a.ciclo_combustivel=1;
+    a.id=1;
+    enfileira(a,&f);
+    printf("1-sem uso\n0-Em uso\nUso:%i\n",estaVazia(&f));
+    //   imprimeFila(&f);
+    a.ciclo_combustivel=2;
+    a.id=2;
+    enfileira(a,&f);
+    a.ciclo_combustivel=3;
+    a.id=3;
+    enfileira(a,&f);
+    imprimeFila(&f);
+    printf("\n");
+    desenfileira(&f,&a);
+    imprimeFila(&f);
+    printf("O obj quer foi retirtado e o id:%i, cobustivel%i",a.id,a.ciclo_combustivel);
+}
+
+#endif //NOVA_FILA_DINAMICA_FILA_H
